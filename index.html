@@ -1422,20 +1422,6 @@
         setShowHint(false);
         setIsCompleted(false);
         clearCanvas();
-        
-        // state(currentTab) 대신 전달받은 targetTab 변수 사용!
-        if (targetTab === 4) {
-          let reviewList = baseList.filter(w => 
-            wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI'
-          );
-          for (let i = reviewList.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [reviewList[i], reviewList[j]] = [reviewList[j], reviewList[i]];
-          }
-          setLearningList(reviewList);
-        } else {
-          setLearningList(baseList);
-        }
       };
 
       const handleTabChange = (tabNum) => {

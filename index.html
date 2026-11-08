@@ -1404,15 +1404,15 @@
           }
         }
       };
-
       const handleDaySelect = (dayStr, targetTab = currentTab) => {
         stopPlaying();
+
         const [start, end] = dayStr.split('-').map(Number);
         const baseList = allVocabData.filter(w => w.day >= start && w.day <= end);
-        
+
         if (baseList.length === 0) {
-          alert(`Day ${dayStr} 단어가 없습니다.`);
-          return;
+            alert(`Day ${dayStr} 단어가 없습니다.`);
+            return;
         }
 
         setSelectedDay(dayStr);
@@ -1422,7 +1422,7 @@
         setIsCompleted(false);
         clearCanvas();
 
-        // 4회독일 때는 X(틀린 단어)만 골라내기!
+        // 4회독 탭일 때 X(몰랐던 단어)만 필터링
         if (targetTab === 4) {
           const reviewList = baseList.filter(w => wordStatuses[w.id] === 'X');
           setLearningList(reviewList);
@@ -1430,6 +1430,7 @@
           setLearningList(baseList);
         }
       };
+
       const handleTabChange = (tabNum) => {
         setCurrentTab(tabNum);
         if (selectedDay !== null) {

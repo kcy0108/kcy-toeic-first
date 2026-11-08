@@ -1303,8 +1303,6 @@
       { id: "30-41", day: 30, eng: "susceptible", kor: "~에 감염되기 쉬운, 영향 받기 쉬운", type: "형용사", point: "susceptible to (~에 걸리기 쉬운)" },
       { id: "30-42", day: 30, eng: "uncomfortably", kor: "불쾌하게, 불편하게", type: "부사", point: "became uncomfortably hot (불쾌하게 더워졌다)" }
     ];
-        
-    ];
 
     // 추후 데이터를 추가할 때 3일 치씩 묶기 위한 UI 옵션 자동 생성 (Day 1~30)
     const ranges = [
@@ -1426,7 +1424,7 @@
         }
       };
 
-      const handleDaySelect = (dayStr) => {
+      const handleDaySelect = (dayStr, targetTab = currentTab) => {
         stopPlaying();
         
         const [start, end] = dayStr.split('-').map(Number);
@@ -1444,7 +1442,8 @@
         setIsCompleted(false);
         clearCanvas();
         
-        if (currentTab === 4) {
+        // state(currentTab) 대신 전달받은 targetTab 변수 사용!
+        if (targetTab === 4) {
           let reviewList = baseList.filter(w => 
             wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI'
           );
@@ -1461,7 +1460,7 @@
       const handleTabChange = (tabNum) => {
         setCurrentTab(tabNum);
         if (selectedDay !== null) {
-          handleDaySelect(selectedDay); 
+          handleDaySelect(selectedDay, tabNum); // 새로 누른 탭 번호를 파라미터로 즉시 전달
         }
       };
 

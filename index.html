@@ -1536,33 +1536,20 @@
               <div className="text-sm font-semibold text-gray-500">전체 암기율 {progress}%</div>
             </header>
 
-            if (targetTab === 4) {
-              let reviewList = baseList.filter(w => 
-                wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI'
-              );
-              setLearningList(reviewList);
-            } else if (targetTab === 5) {
-            let forgettingCurveList = baseList.filter(w => 
-              wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI' || !wordStatuses[w.id]
-            );
-            for (let i = forgettingCurveList.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [forgettingCurveList[i], forgettingCurveList[j]] = [forgettingCurveList[j], forgettingCurveList[i]];
-            }
-            setLearningList(forgettingCurveList.slice(0, 30)); // 가장 복습이 시급한 30개 추출
-          } else {
-            setLearningList(baseList);
-          }
 
             {/* Day 1부터 Day 30까지 3일치씩 묶은 대시보드 블록들 */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 w-full max-w-6xl mx-auto">
               {ranges.map(range => (
-                <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 p-6 rounded-2xl text-left inline-w-full max-w-lg shadow-sm">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">💡</span>
-                    <p className="text-xs text-indigo-700 font-extrabold uppercase tracking-wide">토익 출제 포인트 & 파생어</p>
+                <div 
+                  key={range}
+                  onClick={() => handleDaySelect(range)}
+                  className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 cursor-pointer hover:border-indigo-400 hover:shadow-lg transition-all flex flex-col items-center justify-center min-h-[140px]"
+                >
+                  <h3 className="text-xl font-bold text-slate-800 mb-2">Day {range}</h3>
+                  <p className="text-slate-400 text-sm font-medium mb-3">총 120단어</p>
+                  <div className="px-4 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-bold">
+                    학습 시작
                   </div>
-                  <p className="text-base text-slate-700 font-medium leading-relaxed">{currentWord?.point}</p>
                 </div>
               ))}
             </div>

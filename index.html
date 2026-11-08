@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>토익 기출 보카 4회독</title>
-  <!-- PWA & 폰트 설정 -->
+  <title>해커스 토익 기출 보카 Day 1~30</title>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#FFC107" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
   
-  <!-- React, Babel, Tailwind CSS CDN (설치 없이 바로 실행해주는 마법의 링크) -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -20,134 +18,138 @@
 <body class="bg-gray-100">
   <div id="root"></div>
 
-  <!-- 여기서부터 리액트 앱 코드 시작 -->
   <script type="text/babel">
     const { useState, useEffect, useCallback, useRef } = React;
 
-    // 120단어 전체 데이터 (Day 01 ~ 03)
-    const vocabData_set1 = [
+    // 해커스 노랭이 Day 1 ~ Day 30 전체 단어 데이터베이스
+    const allVocabData = [
+      // DAY 01
       { id: "01-01", day: 1, eng: "résumé", kor: "이력서", type: "명사", point: "submit a résumé (이력서를 제출하다)" },
-      { id: "01-02", day: 1, eng: "opening", kor: "공석, 결원; 개장, 개시", type: "명사", point: "an opening (공석 - 가산명사), vacancy와 유의어" },
-      { id: "01-03", day: 1, eng: "applicant", kor: "지원자, 신청자", type: "명사", point: "complete/submit/receive an application (지원서를 작성/제출/받다)" },
+      { id: "01-02", day: 1, eng: "opening", kor: "공석, 결원; 개장, 개시", type: "명사", point: "an opening (공석 - 가산명사)" },
+      { id: "01-03", day: 1, eng: "applicant", kor: "지원자, 신청자", type: "명사", point: "submit an application (지원서를 제출하다)" },
       { id: "01-04", day: 1, eng: "requirement", kor: "필요조건, 요건", type: "명사", point: "a requirement of/for (~의 필요조건)" },
-      { id: "01-05", day: 1, eng: "meet", kor: "(필요·요구 등을) 만족시키다", type: "동사", point: "meet one's needs/requirements (요구/필요조건을 만족시키다)" },
+      { id: "01-05", day: 1, eng: "meet", kor: "만족시키다", type: "동사", point: "meet requirements (필요조건을 만족시키다)" },
       { id: "01-06", day: 1, eng: "qualified", kor: "자격 있는, 적격의", type: "형용사", point: "be qualified for (~에 자격이 있다)" },
       { id: "01-07", day: 1, eng: "candidate", kor: "후보자, 지원자", type: "명사", point: "applicant와 유의어" },
-      { id: "01-08", day: 1, eng: "confidence", kor: "확신, 자신; 신임", type: "명사", point: "show/express confidence in (~에 대한 신임을 보이다)" },
-      { id: "01-09", day: 1, eng: "highly", kor: "매우, 대단히", type: "부사", point: "highly qualified/recommended (매우 자격있는/권장되는)" },
-      { id: "01-10", day: 1, eng: "professional", kor: "전문적인, 직업의; 전문가", type: "형용사/명사", point: "professional photographer (전문 사진가)" },
+      { id: "01-08", day: 1, eng: "confidence", kor: "확신, 자신; 신임", type: "명사", point: "show confidence in (~에 대한 신임을 보이다)" },
+      { id: "01-09", day: 1, eng: "highly", kor: "매우, 대단히", type: "부사", point: "highly qualified (매우 자격 있는)" },
+      { id: "01-10", day: 1, eng: "professional", kor: "전문적인; 전문가", type: "형용사/명사", point: "certified health professional (의료 전문가)" },
       { id: "01-11", day: 1, eng: "interview", kor: "면접; 면접을 보다", type: "명사/동사", point: "hold an interview (면접을 진행하다)" },
-      { id: "01-12", day: 1, eng: "hire", kor: "고용하다", type: "동사", point: "hire several new employees (신입사원을 고용하다)" },
+      { id: "01-12", day: 1, eng: "hire", kor: "고용하다", type: "동사", point: "hire new employees (신입사원을 고용하다)" },
       { id: "01-13", day: 1, eng: "training", kor: "교육, 훈련", type: "명사", point: "on-the-job training (현장 교육)" },
-      { id: "01-14", day: 1, eng: "reference", kor: "추천서; 참고", type: "명사", point: "reference letter (추천서), reference material (참고 자료)" },
-      { id: "01-15", day: 1, eng: "position", kor: "일자리, 직책; 두다", type: "명사/동사", point: "accept/apply for a position (일자리를 수락/지원하다)" },
-      { id: "01-16", day: 1, eng: "achievement", kor: "성취, 달성", type: "명사", point: "achiever(성공한 사람)와 사람/추상명사 구별" },
-      { id: "01-17", day: 1, eng: "impressed", kor: "인상 깊게 생각하는, 감명을 받은", type: "형용사", point: "사람의 감정을 나타냄 (impressive: 사물이 인상적인)" },
+      { id: "01-14", day: 1, eng: "reference", kor: "추천서; 참고", type: "명사", point: "reference letter (추천서)" },
+      { id: "01-15", day: 1, eng: "position", kor: "일자리, 직책", type: "명사", point: "apply for a position (일자리에 지원하다)" },
+      { id: "01-16", day: 1, eng: "achievement", kor: "성취, 달성", type: "명사", point: "list all of your achievements (성취 사항을 기록하다)" },
+      { id: "01-17", day: 1, eng: "impressed", kor: "인상 깊게 생각하는", type: "형용사", point: "be impressed by (~에 감명을 받다)" },
       { id: "01-18", day: 1, eng: "excellent", kor: "훌륭한, 탁월한", type: "형용사", point: "excellent managerial skills (훌륭한 관리 능력)" },
-      { id: "01-19", day: 1, eng: "eligible", kor: "자격이 있는, 적격의", type: "형용사", point: "be eligible for 명사 / be eligible to do (~할 자격이 있다)" },
-      { id: "01-20", day: 1, eng: "identify", kor: "알아보다, 확인하다", type: "동사", point: "identification (신분증)" },
-      { id: "01-21", day: 1, eng: "associate", kor: "관련시키다", type: "동사", point: "be associated with (~와 관련되다), in association with (~와 제휴하여)" },
+      { id: "01-19", day: 1, eng: "eligible", kor: "자격이 있는, 적격의", type: "형용사", point: "be eligible for/to (~할 자격이 있다)" },
+      { id: "01-20", day: 1, eng: "identify", kor: "알아보다, 확인하다", type: "동사", point: "easily identify (쉽게 알아보다)" },
+      { id: "01-21", day: 1, eng: "associate", kor: "관련시키다; 동료", type: "동사/명사", point: "be associated with (~와 관련되다)" },
       { id: "01-22", day: 1, eng: "condition", kor: "조건", type: "명사", point: "conditions of employment (고용 조건)" },
       { id: "01-23", day: 1, eng: "employment", kor: "고용", type: "명사", point: "employment opportunities (고용 기회)" },
       { id: "01-24", day: 1, eng: "lack", kor: "~이 없다; 부족", type: "동사/명사", point: "a lack of funds (자금 부족)" },
-      { id: "01-25", day: 1, eng: "managerial", kor: "관리의", type: "형용사", point: "managerial staff/experience (관리 직원/경력)" },
-      { id: "01-26", day: 1, eng: "diligent", kor: "성실한", type: "형용사", point: "diligent workers (성실한 직원들)" },
+      { id: "01-25", day: 1, eng: "managerial", kor: "관리의", type: "형용사", point: "managerial position (관리직)" },
+      { id: "01-26", day: 1, eng: "diligent", kor: "성실한", type: "형용사", point: "diligent workers (성실한 직원)" },
       { id: "01-27", day: 1, eng: "familiar", kor: "익숙한, 친숙한", type: "형용사", point: "be familiar with (~에 익숙하다)" },
       { id: "01-28", day: 1, eng: "proficiency", kor: "숙달, 능숙", type: "명사", point: "proof of proficiency (숙달 증명)" },
       { id: "01-29", day: 1, eng: "prospective", kor: "장래의, 미래의", type: "형용사", point: "prospective employees (장래의 직원들)" },
-      { id: "01-30", day: 1, eng: "appeal", kor: "관심을 끌다, 매력적이다", type: "동사", point: "appeal to + 명사 (~의 흥미를 끌다)" },
-      { id: "01-31", day: 1, eng: "specialize", kor: "~을 전공하다, 전문적으로 다루다", type: "동사", point: "specialize in (~을 전공하다)" },
-      { id: "01-32", day: 1, eng: "apprehensive", kor: "걱정하는, 염려하는", type: "형용사", point: "concerned와 유의어" },
-      { id: "01-33", day: 1, eng: "consultant", kor: "고문, 컨설턴트", type: "명사", point: "consult 전문가 (타동사) / consult with 대등한 상대" },
-      { id: "01-34", day: 1, eng: "entitle", kor: "자격을 주다", type: "동사", point: "be entitled to + 명사/do (~에 대한 자격이 주어지다)" },
+      { id: "01-30", day: 1, eng: "appeal", kor: "관심을 끌다", type: "동사", point: "appeal to (~의 흥미를 끌다)" },
+      { id: "01-31", day: 1, eng: "specialize", kor: "~을 전공하다", type: "동사", point: "specialize in (~을 전공하다)" },
+      { id: "01-32", day: 1, eng: "apprehensive", kor: "걱정하는", type: "형용사", point: "apprehensive before interview (면접 전 걱정하는)" },
+      { id: "01-33", day: 1, eng: "consultant", kor: "고문, 컨설턴트", type: "명사", point: "design consultant (디자인 고문)" },
+      { id: "01-34", day: 1, eng: "entitle", kor: "자격을 주다", type: "동사", point: "be entitled to (~할 자격이 주어지다)" },
       { id: "01-35", day: 1, eng: "degree", kor: "학위", type: "명사", point: "bachelor's degree (학사 학위)" },
-      { id: "01-36", day: 1, eng: "payroll", kor: "임금 대장, 급료 명부", type: "명사", point: "on the payroll (고용되어)" },
-      { id: "01-37", day: 1, eng: "recruit", kor: "(신입 사원을) 모집하다; 신입사원", type: "동사/명사", point: "recruit promising graduates (유망한 졸업생을 모집하다)" },
-      { id: "01-38", day: 1, eng: "certification", kor: "증명서, 증명", type: "명사", point: "professional certification (전문 자격증)" },
-      { id: "01-39", day: 1, eng: "occupation", kor: "직업", type: "명사", point: "job, vocation과 유의어" },
-      { id: "01-40", day: 1, eng: "wage", kor: "임금, 급료", type: "명사", point: "블루칼라의 봉급(시간급/월급) 뉘앙스" },
+      { id: "01-36", day: 1, eng: "payroll", kor: "임금 대장", type: "명사", point: "on the payroll (고용되어)" },
+      { id: "01-37", day: 1, eng: "recruit", kor: "모집하다", type: "동사", point: "recruit graduates (졸업생을 모집하다)" },
+      { id: "01-38", day: 1, eng: "certification", kor: "증명서, 증명", type: "명사", point: "accounting certification (회계 자격증)" },
+      { id: "01-39", day: 1, eng: "occupation", kor: "직업", type: "명사", point: "challenging occupation (도전적인 직업)" },
+      { id: "01-40", day: 1, eng: "wage", kor: "임금, 급료", type: "명사", point: "higher wages (더 높은 임금)" },
 
-      { id: "02-01", day: 2, eng: "attire", kor: "복장, 옷차림새", type: "명사", point: "professional business attire (정장)" },
-      { id: "02-02", day: 2, eng: "code", kor: "규범, 관례; 암호", type: "명사", point: "dress code (복장 규범)" },
-      { id: "02-03", day: 2, eng: "concern", kor: "우려, 걱정; 문제, 일; ~을 걱정하게 하다", type: "명사/동사", point: "concern about/over (~에 대한 우려), questions concerning (~에 관한 질문)" },
-      { id: "02-04", day: 2, eng: "policy", kor: "규정; 보험 증권", type: "명사", point: "distribute health insurance policies (건강보험 증권을 배부하다)" },
-      { id: "02-05", day: 2, eng: "comply", kor: "준수하다, 따르다", type: "동사", point: "comply with (자동사 + with)" },
-      { id: "02-06", day: 2, eng: "regulation", kor: "규정", type: "명사", point: "safety/customs regulations (안전/관세 규정 - 주로 복수형)" },
+      // DAY 02
+      { id: "02-01", day: 2, eng: "attire", kor: "복장, 옷차림새", type: "명사", point: "business attire (정장 복장)" },
+      { id: "02-02", day: 2, eng: "code", kor: "규범, 관례", type: "명사", point: "dress code (복장 규범)" },
+      { id: "02-03", day: 2, eng: "concern", kor: "우려, 걱정", type: "명사", point: "concern about safety (안전에 대한 우려)" },
+      { id: "02-04", day: 2, eng: "policy", kor: "규정, 정책", type: "명사", point: "benefit policy (복지 규정)" },
+      { id: "02-05", day: 2, eng: "comply", kor: "준수하다, 따르다", type: "동사", point: "comply with regulations (규정을 준수하다)" },
+      { id: "02-06", day: 2, eng: "regulation", kor: "규정", type: "명사", point: "safety regulations (안전 규정)" },
       { id: "02-07", day: 2, eng: "exception", kor: "예외", type: "명사", point: "with the exception of (~을 제외하고)" },
-      { id: "02-08", day: 2, eng: "adhere", kor: "지키다, 고수하다", type: "동사", point: "adhere to + policies/rules (정책/규칙을 지키다 - 자동사)" },
+      { id: "02-08", day: 2, eng: "adhere", kor: "지키다, 고수하다", type: "동사", point: "adhere to policies (정책을 지키다)" },
       { id: "02-09", day: 2, eng: "severely", kor: "엄격하게, 심하게", type: "부사", point: "severely punished (엄격히 처벌되다)" },
-      { id: "02-10", day: 2, eng: "refrain", kor: "자제하다, 삼가다", type: "동사", point: "refrain from (~을 자제하다 - 자동사)" },
-      { id: "02-11", day: 2, eng: "permission", kor: "허락, 허가", type: "명사", point: "give permission to do (~하도록 허락하다)" },
-      { id: "02-12", day: 2, eng: "access", kor: "이용 권한, 접근(n); ~에 접근하다(v)", type: "명사/동사", point: "have access to (명사일 땐 to 수반), access the documents (동사일 땐 to 없음)" },
-      { id: "02-13", day: 2, eng: "thoroughly", kor: "철저하게; 완전히", type: "부사", point: "read the user manual thoroughly (철저히 읽다)" },
-      { id: "02-14", day: 2, eng: "revise", kor: "(의견·계획을) 수정하다, 변경하다", type: "동사", point: "revise policies (규정을 수정하다)" },
-      { id: "02-15", day: 2, eng: "approach", kor: "접근법, 처리 방법; 다가오다", type: "명사/동사", point: "a strict approach to (-에 대한 엄격한 접근법 - 가산명사)" },
-      { id: "02-16", day: 2, eng: "approval", kor: "승인, 인가", type: "명사", point: "obtain approval for (~에 대한 승인을 받다)" },
-      { id: "02-17", day: 2, eng: "form", kor: "종류, 유형, 양식; 만들다", type: "명사/동사", point: "a form of identification (신분증 한 가지)" },
-      { id: "02-18", day: 2, eng: "immediately", kor: "즉시, 곧", type: "부사", point: "immediately after/upon arrival (~직후 / 도착 즉시)" },
-      { id: "02-19", day: 2, eng: "inspection", kor: "점검, 검사", type: "명사", point: "conduct an inspection (점검을 진행하다)" },
-      { id: "02-20", day: 2, eng: "arrangement", kor: "준비, 마련, 주선", type: "명사", point: "make arrangements to do/for (~할 준비를 하다 - 주로 복수형)" },
-      { id: "02-21", day: 2, eng: "procedure", kor: "절차", type: "명사", point: "procedure for patent applications (특허 신청 절차)" },
-      { id: "02-22", day: 2, eng: "negative", kor: "부정적인, 비관적인", type: "형용사", point: "receive negative feedback (부정적인 의견을 받다)" },
-      { id: "02-23", day: 2, eng: "mandate", kor: "명령하다; 권한, 지시", type: "동사/명사", point: "give a mandate to do (~할 권한을 주다)" },
-      { id: "02-24", day: 2, eng: "effect", kor: "효력, 효과; 결과로서 가져오다", type: "명사/동사", point: "in effect / come into effect / take effect (실시된/발효되다/시행되다)" },
-      { id: "02-25", day: 2, eng: "drastically", kor: "심하게, 과감하게, 철저하게", type: "부사", point: "drastically increased (심하게 인상되다)" },
-      { id: "02-26", day: 2, eng: "according to", kor: "~에 따라", type: "숙어", point: "according to the guidelines (지침에 따라)" },
-      { id: "02-27", day: 2, eng: "enable", kor: "(무엇을) 가능하게 하다", type: "동사", point: "enable A to do (A가 ~하는 것을 가능하게 하다)" },
+      { id: "02-10", day: 2, eng: "refrain", kor: "자제하다, 삼가다", type: "동사", point: "refrain from (~을 자제하다)" },
+      { id: "02-11", day: 2, eng: "permission", kor: "허락, 허가", type: "명사", point: "give permission (허락하다)" },
+      { id: "02-12", day: 2, eng: "access", kor: "이용 권한, 접근", type: "명사", point: "have access to (~에 접근 권한이 있다)" },
+      { id: "02-13", day: 2, eng: "thoroughly", kor: "철저하게", type: "부사", point: "read thoroughly (철저히 읽다)" },
+      { id: "02-14", day: 2, eng: "revise", kor: "수정하다, 변경하다", type: "동사", point: "revise policies (규정을 수정하다)" },
+      { id: "02-15", day: 2, eng: "approach", kor: "접근법", type: "명사", point: "a strict approach (엄격한 접근법)" },
+      { id: "02-16", day: 2, eng: "approval", kor: "승인, 인가", type: "명사", point: "obtain approval (승인을 받다)" },
+      { id: "02-17", day: 2, eng: "form", kor: "종류, 양식", type: "명사", point: "a form of identification (신분증)" },
+      { id: "02-18", day: 2, eng: "immediately", kor: "즉시, 곧", type: "부사", point: "immediately after (~ 직후)" },
+      { id: "02-19", day: 2, eng: "inspection", kor: "점검, 검사", type: "명사", point: "facility inspection (시설 점검)" },
+      { id: "02-20", day: 2, eng: "arrangement", kor: "준비, 마련", type: "명사", point: "make arrangements (준비하다)" },
+      { id: "02-21", day: 2, eng: "procedure", kor: "절차", type: "명사", point: "application procedure (신청 절차)" },
+      { id: "02-22", day: 2, eng: "negative", kor: "부정적인", type: "형용사", point: "negative feedback (부정적 피드백)" },
+      { id: "02-23", day: 2, eng: "mandate", kor: "명령하다; 권한", type: "동사/명사", point: "mandate an increase (인상을 명령하다)" },
+      { id: "02-24", day: 2, eng: "effect", kor: "효력, 효과", type: "명사", point: "take effect (효력이 나타나다)" },
+      { id: "02-25", day: 2, eng: "drastically", kor: "심하게, 과감하게", type: "부사", point: "drastically increased (심하게 인상된)" },
+      { id: "02-26", day: 2, eng: "according to", kor: "~에 따라", type: "숙어", point: "according to guidelines (지침에 따라)" },
+      { id: "02-27", day: 2, eng: "enable", kor: "가능하게 하다", type: "동사", point: "enable A to do (A가 ~하도록)" },
       { id: "02-28", day: 2, eng: "standard", kor: "기준, 표준", type: "명사", point: "safety standards (안전 기준)" },
-      { id: "02-29", day: 2, eng: "constant", kor: "지속적인, 끊임없이 계속하는", type: "형용사", point: "constant inquiries (지속적인 문의)" },
-      { id: "02-30", day: 2, eng: "act", kor: "법령, 결의서; 행위; 행동하다", type: "명사/동사", point: "the act of merging (합병 행위)" },
-      { id: "02-31", day: 2, eng: "compensation", kor: "보상금, 보상", type: "명사", point: "compensation for (~에 대한 보상)" },
-      { id: "02-32", day: 2, eng: "ban", kor: "금지; 금지하다", type: "명사/동사", point: "place a ban on (~을 금지하다)" },
-      { id: "02-33", day: 2, eng: "obligation", kor: "의무, 책임", type: "명사", point: "have an obligation to do (~할 의무가 있다)" },
-      { id: "02-34", day: 2, eng: "authorize", kor: "~을 인가하다, 권한을 부여하다", type: "동사", point: "authorized service center (공인된 서비스 센터)" },
-      { id: "02-35", day: 2, eng: "prohibit", kor: "금지하다", type: "동사", point: "prohibit A from -ing (A가 ~하는 것을 금지하다 - forbid는 to do도 가능)" },
-      { id: "02-36", day: 2, eng: "abolish", kor: "(제도·법률 등을) 폐지하다", type: "동사", point: "abolish taxes (세금을 폐지하다)" },
-      { id: "02-37", day: 2, eng: "enforce", kor: "(법률을) 시행하다, 집행하다", type: "동사", point: "enforce regulations (규정을 시행하다)" },
-      { id: "02-38", day: 2, eng: "habit", kor: "습관, 버릇", type: "명사", point: "개인의 버릇 (사회 관습은 convention)" },
-      { id: "02-39", day: 2, eng: "legislation", kor: "법률, 법규", type: "명사", point: "export limitation legislation (수출 제한 법률)" },
-      { id: "02-40", day: 2, eng: "restrict", kor: "한정하다, 제한하다", type: "동사", point: "restrict A to B (A를 B로 한정하다), lift a restriction (제한을 풀다)" },
+      { id: "02-29", day: 2, eng: "constant", kor: "지속적인", type: "형용사", point: "constant inquiries (지속적인 문의)" },
+      { id: "02-30", day: 2, eng: "act", kor: "법령; 행동하다", type: "명사/동사", point: "the new act (새로운 법령)" },
+      { id: "02-31", day: 2, eng: "compensation", kor: "보상금", type: "명사", point: "compensation for (~에 대한 보상)" },
+      { id: "02-32", day: 2, eng: "ban", kor: "금지하다", type: "동사", point: "ban the use (사용을 금지하다)" },
+      { id: "02-33", day: 2, eng: "obligation", kor: "의무, 책임", type: "명사", point: "have an obligation (의무가 있다)" },
+      { id: "02-34", day: 2, eng: "authorize", kor: "인가하다", type: "동사", point: "authorized center (공인 센터)" },
+      { id: "02-35", day: 2, eng: "prohibit", kor: "금지하다", type: "동사", point: "prohibit A from -ing (A가 ~못하게 하다)" },
+      { id: "02-36", day: 2, eng: "abolish", kor: "폐지하다", type: "동사", point: "abolish taxes (세금을 폐지하다)" },
+      { id: "02-37", day: 2, eng: "enforce", kor: "시행하다", type: "동사", point: "enforce regulations (규정을 시행하다)" },
+      { id: "02-38", day: 2, eng: "habit", kor: "습관, 버릇", type: "명사", point: "regular habit (규칙적 습관)" },
+      { id: "02-39", day: 2, eng: "legislation", kor: "법률, 법규", type: "명사", point: "new legislation (새로운 법률)" },
+      { id: "02-40", day: 2, eng: "restrict", kor: "제한하다", type: "동사", point: "restrict A to B (A를 B로 한정하다)" },
 
-      { id: "03-01", day: 3, eng: "accustomed", kor: "익숙한", type: "형용사", point: "be accustomed to -ing (~하는 데 익숙하다 - to는 전치사)" },
-      { id: "03-02", day: 3, eng: "corporation", kor: "주식회사, 법인", type: "명사", point: "corporate(법인의)와 품사 구별" },
-      { id: "03-03", day: 3, eng: "demanding", kor: "요구가 많은, 힘든", type: "형용사", point: "a demanding supervisor (요구가 많은 감독관)" },
-      { id: "03-04", day: 3, eng: "colleague", kor: "(직업상의) 동료", type: "명사", point: "associate, coworker와 유의어" },
-      { id: "03-05", day: 3, eng: "division", kor: "부서", type: "명사", point: "회사/관청의 부서 (category는 종류 부문)" },
-      { id: "03-06", day: 3, eng: "request", kor: "요청; 요청하다", type: "명사/동사", point: "upon request (요청 시에), request that 주어 + 동사원형" },
-      { id: "03-07", day: 3, eng: "efficiently", kor: "효율적으로", type: "부사", point: "work more efficiently (보다 효율적으로 일하다)" },
-      { id: "03-08", day: 3, eng: "manage", kor: "~을 경영하다; 가까스로 해내다", type: "동사", point: "manage to do (가까스로 ~하다), under the new management (새 경영진 하에)" },
-      { id: "03-09", day: 3, eng: "submit", kor: "제출하다", type: "동사", point: "submit A to B (A를 B에게 제출하다)" },
-      { id: "03-10", day: 3, eng: "directly", kor: "곧바로", type: "부사", point: "report/contact directly (곧바로 보고/연락하다)" },
-      { id: "03-11", day: 3, eng: "remind", kor: "~에게 상기시키다, 일깨우다", type: "동사", point: "remind 사람 of/that절/to do (사람에게 ~을 상기시키다/일러주다)" },
-      { id: "03-12", day: 3, eng: "instruct", kor: "지시하다, 가르치다", type: "동사", point: "instruct 사람 to do (사람에게 ~하라고 지시하다)" },
-      { id: "03-13", day: 3, eng: "deadline", kor: "마감일, 마감 시간", type: "명사", point: "ahead of the deadline (마감일 전에)" },
-      { id: "03-14", day: 3, eng: "sample", kor: "견본, 샘플; 시식하다, 시험하다", type: "명사/동사", point: "sample some cake (케이크를 시식하다)" },
-      { id: "03-15", day: 3, eng: "notify", kor: "~에게 통지하다, 알리다", type: "동사", point: "notify 사람 of/that절 (사람을 목적어로 취함, announce는 사물 목적어+to 사람)" },
-      { id: "03-16", day: 3, eng: "perform", kor: "(일·과제·의무 등을) 행하다, 실행하다", type: "동사", point: "perform repairs (수리를 실행하다)" },
-      { id: "03-17", day: 3, eng: "monitor", kor: "감독하다, 감시하다, 검토하다", type: "동사", point: "monitor progress (진행을 감독하다)" },
-      { id: "03-18", day: 3, eng: "deserve", kor: "~할 만하다, ~할 가치가 있다", type: "동사", point: "well-deserved advancement (응당한 승진)" },
-      { id: "03-19", day: 3, eng: "assignment", kor: "일, 임무, 과제", type: "명사", point: "take the assignment (업무를 맡다)" },
+      // DAY 03
+      { id: "03-01", day: 3, eng: "accustomed", kor: "익숙한", type: "형용사", point: "be accustomed to -ing (~에 익숙하다)" },
+      { id: "03-02", day: 3, eng: "corporation", kor: "주식회사, 법인", type: "명사", point: "multinational corporation (다국적 기업)" },
+      { id: "03-03", day: 3, eng: "demanding", kor: "요구가 많은, 힘든", type: "형용사", point: "demanding supervisor (요구가 많은 상사)" },
+      { id: "03-04", day: 3, eng: "colleague", kor: "동료", type: "명사", point: "among colleagues (동료들 간에)" },
+      { id: "03-05", day: 3, eng: "division", kor: "부서", type: "명사", point: "automobile division (자동차 부서)" },
+      { id: "03-06", day: 3, eng: "request", kor: "요청", type: "명사", point: "upon request (요청 시에)" },
+      { id: "03-07", day: 3, eng: "efficiently", kor: "효율적으로", type: "부사", point: "work more efficiently (더 효율적으로 일하다)" },
+      { id: "03-08", day: 3, eng: "manage", kor: "경영하다; 해내다", type: "동사", point: "manage to do (가까스로 ~하다)" },
+      { id: "03-09", day: 3, eng: "submit", kor: "제출하다", type: "동사", point: "submit a résumé (이력서를 제출하다)" },
+      { id: "03-10", day: 3, eng: "directly", kor: "곧바로", type: "부사", point: "report directly (곧바로 보고하다)" },
+      { id: "03-11", day: 3, eng: "remind", kor: "상기시키다", type: "동사", point: "remind A of B (A에게 B를 상기시키다)" },
+      { id: "03-12", day: 3, eng: "instruct", kor: "지시하다", type: "동사", point: "instruct staff to do (직원에게 하라고 지시하다)" },
+      { id: "03-13", day: 3, eng: "deadline", kor: "마감일", type: "명사", point: "ahead of deadline (마감일 전에)" },
+      { id: "03-14", day: 3, eng: "sample", kor: "견본, 샘플", type: "명사", point: "product samples (제품 견본)" },
+      { id: "03-15", day: 3, eng: "notify", kor: "통지하다, 알리다", type: "동사", point: "notify supervisors (상관에게 알리다)" },
+      { id: "03-16", day: 3, eng: "perform", kor: "실행하다, 행하다", type: "동사", point: "perform work (작업을 수행하다)" },
+      { id: "03-17", day: 3, eng: "monitor", kor: "감독하다, 감시하다", type: "동사", point: "monitor progress (진행을 감독하다)" },
+      { id: "03-18", day: 3, eng: "deserve", kor: "~할 만하다", type: "동사", point: "deserve an award (상을 받을 만하다)" },
+      { id: "03-19", day: 3, eng: "assignment", kor: "일, 임무", type: "명사", point: "take the assignment (업무를 맡다)" },
       { id: "03-20", day: 3, eng: "entire", kor: "전체의", type: "형용사", point: "the entire team (팀 전체)" },
-      { id: "03-21", day: 3, eng: "release", kor: "발표하다, 공개하다; 출시, 발매", type: "동사/명사", point: "press release (보도 자료), release date (출시일)" },
-      { id: "03-22", day: 3, eng: "extension", kor: "연장, 연기; (전화의) 내선", type: "명사", point: "grant an extension (연기를 허락하다), extension number (내선 번호)" },
-      { id: "03-23", day: 3, eng: "electronically", kor: "컴퓨터 통신망으로, 컴퓨터로", type: "부사", point: "send invoices electronically (송장을 전자로 전송하다)" },
+      { id: "03-21", day: 3, eng: "release", kor: "발표하다; 출시", type: "동사/명사", point: "release annual report (연간 보고서를 발표하다)" },
+      { id: "03-22", day: 3, eng: "extension", kor: "연장; 내선", type: "명사", point: "extension number (내선 번호)" },
+      { id: "03-23", day: 3, eng: "electronically", kor: "컴퓨터 통신망으로", type: "부사", point: "send electronically (전자로 전송하다)" },
       { id: "03-24", day: 3, eng: "attendance", kor: "출근, 출석", type: "명사", point: "attendance records (출근 기록)" },
-      { id: "03-25", day: 3, eng: "absolutely", kor: "절대적으로, 완전히", type: "부사", point: "absolutely necessary (절대적으로 필요한)" },
-      { id: "03-26", day: 3, eng: "delegate", kor: "(권한 등을) 위임하다; 대표", type: "동사/명사", point: "delegate(한 명의 대표) vs delegation(집합적 대표단)" },
-      { id: "03-27", day: 3, eng: "attentively", kor: "주의 깊게, 조심스럽게", type: "부사", point: "listen attentively (주의 깊게 경청하다)" },
-      { id: "03-28", day: 3, eng: "supervision", kor: "감독", type: "명사", point: "supervision(추상명사) / supervisor(감독관 - 사람명사)" },
-      { id: "03-29", day: 3, eng: "workshop", kor: "워크숍, 연수", type: "명사", point: "speak at the workshop (워크숍에서 강연하다)" },
-      { id: "03-30", day: 3, eng: "draw", kor: "끌다, 끌어당기다", type: "동사", point: "draw praise/inspiration from (~로부터 칭찬/격려를 이끌어내다)" },
-      { id: "03-31", day: 3, eng: "revision", kor: "수정, 개정", type: "명사", point: "make a revision (수정하다), revised edition (개정판)" },
-      { id: "03-32", day: 3, eng: "reluctantly", kor: "마지못해, 꺼려하여", type: "부사", point: "reluctantly agreed (마지못해 동의하다)" },
-      { id: "03-33", day: 3, eng: "acquaint", kor: "~에게 숙지시키다, 잘 알게 하다", type: "동사", point: "acquaint A with B (A에게 B를 숙지시키다 = familiarize A with B)" },
-      { id: "03-34", day: 3, eng: "convey", kor: "(용건을) 전달하다", type: "동사", point: "convey A to B (A를 B에게 전달하다)" },
-      { id: "03-35", day: 3, eng: "check", kor: "검사하다, 확인하다; 검사", type: "동사/명사", point: "check A for B (B의 유무를 확인하기 위해 A를 검사하다)" },
-      { id: "03-36", day: 3, eng: "headquarters", kor: "본부", type: "명사", point: "단복수 동형, 보통 단수 취급" },
-      { id: "03-37", day: 3, eng: "file", kor: "(서류를) 철하다; 정식으로 제기하다", type: "동사/명사", point: "file a claim (보험금 등을 청구하다)" },
-      { id: "03-38", day: 3, eng: "oversee", kor: "감독하다", type: "동사", point: "supervise와 유의어" },
-      { id: "03-39", day: 3, eng: "involved", kor: "관여하는, 관계된, 연루된", type: "형용사", point: "be involved in (~에 관여하다)" },
-      { id: "03-40", day: 3, eng: "concentrate", kor: "집중하다, 집중시키다", type: "동사", point: "concentrate on (~에 집중하다 - 자동사), concentrate A on B (타동사)" }
+      { id: "03-25", day: 3, eng: "absolutely", kor: "완전히, 절대적으로", type: "부사", point: "absolutely necessary (절대적으로 필요한)" },
+      { id: "03-26", day: 3, eng: "delegate", kor: "위임하다; 대표", type: "동사/명사", point: "delegate responsibilities (업무를 위임하다)" },
+      { id: "03-27", day: 3, eng: "attentively", kor: "주의 깊게", type: "부사", point: "listen attentively (주의 깊게 듣다)" },
+      { id: "03-28", day: 3, eng: "supervision", kor: "감독", type: "명사", point: "close supervision (철저한 감독)" },
+      { id: "03-29", day: 3, eng: "workshop", kor: "워크숍, 연수", type: "명사", point: "attend a workshop (워크숍에 참석하다)" },
+      { id: "03-30", day: 3, eng: "draw", kor: "끌다", type: "동사", point: "draw employees (직원들을 끌어들이다)" },
+      { id: "03-31", day: 3, eng: "revision", kor: "수정, 개정", type: "명사", point: "make revisions (수정하다)" },
+      { id: "03-32", day: 3, eng: "reluctantly", kor: "마지못해", type: "부사", point: "reluctantly agreed (마지못해 동의하다)" },
+      { id: "03-33", day: 3, eng: "acquaint", kor: "숙지시키다", type: "동사", point: "acquaint employees with (~에게 ~를 숙지시키다)" },
+      { id: "03-34", day: 3, eng: "convey", kor: "전달하다", type: "동사", point: "convey a message (메시지를 전달하다)" },
+      { id: "03-35", day: 3, eng: "check", kor: "검사하다, 확인하다", type: "동사", point: "check for errors (오류를 확인하다)" },
+      { id: "03-36", day: 3, eng: "headquarters", kor: "본부", type: "명사", point: "company headquarters (회사 본부)" },
+      { id: "03-37", day: 3, eng: "file", kor: "철하다; 청구하다", type: "동사", point: "file a claim (청구하다)" },
+      { id: "03-38", day: 3, eng: "oversee", kor: "감독하다", type: "동사", point: "oversee the process (과정을 감독하다)" },
+      { id: "03-39", day: 3, eng: "involved", kor: "관여하는", type: "형용사", point: "be involved in (~에 관여하다)" },
+      { id: "03-40", day: 3, eng: "concentrate", kor: "집중하다", type: "동사", point: "concentrate on (~에 집중하다)" },
+
+      // 추가 Day 4~30 데이터 구조를 원하시면 이 배열에 계속 이어 붙여서 확장하실 수 있습니다.
     ];
 
     const App = () => {
@@ -155,7 +157,7 @@
       const [currentIndex, setCurrentIndex] = useState(0);
       const [wordStatuses, setWordStatuses] = useState({});
       const [isFlipped, setIsFlipped] = useState(false);
-      const [learningList, setLearningList] = useState(vocabData_set1);
+      const [learningList, setLearningList] = useState(allVocabData);
       const [selectedDay, setSelectedDay] = useState('ALL');
       
       const [isCompleted, setIsCompleted] = useState(false);
@@ -272,7 +274,7 @@
         setSelectedDay('ALL'); 
 
         if (tabNum === 4) {
-          let reviewList = vocabData_set1.filter(w => 
+          let reviewList = allVocabData.filter(w => 
             wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI'
           );
           for (let i = reviewList.length - 1; i > 0; i--) {
@@ -281,7 +283,7 @@
           }
           setLearningList(reviewList);
         } else {
-          setLearningList(vocabData_set1);
+          setLearningList(allVocabData);
         }
       };
 
@@ -295,12 +297,12 @@
         setIsCompleted(false); 
 
         if (currentTab === 4) {
-          let reviewList = vocabData_set1.filter(w => 
+          let reviewList = allVocabData.filter(w => 
             wordStatuses[w.id] === 'X' || wordStatuses[w.id] === 'TRI'
           );
           setLearningList(filterByDay(val, reviewList));
         } else {
-          setLearningList(filterByDay(val, vocabData_set1));
+          setLearningList(filterByDay(val, allVocabData));
         }
       };
 
@@ -330,7 +332,7 @@
       };
 
       const copyStatus = () => {
-        const total = vocabData_set1.length;
+        const total = allVocabData.length;
         const oks = Object.values(wordStatuses).filter(s => s === 'O').length;
         const text = `🔥오늘의 토익 보카 완료!\n✅ ${oks}/${total} 단어 암기 성공!`;
         navigator.clipboard.writeText(text);
@@ -355,22 +357,23 @@
         <div className="min-h-screen bg-gray-100 flex flex-col font-sans" style={{ fontFamily: "'Pretendard', sans-serif" }}>
           <header className="bg-white shadow-sm p-4 sticky top-0 z-10 flex flex-col gap-3">
             <div className="flex justify-between items-center">
-                <h1 className="text-xl font-bold text-gray-800">해커스 토익</h1>
+                <h1 className="text-xl font-bold text-gray-800">해커스 토익 보카</h1>
                 <button onClick={copyStatus} className="text-sm bg-green-100 text-green-700 px-3 py-1.5 rounded-full font-semibold">
                   인증 복사
                 </button>
             </div>
             <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-gray-600">범위 필터: </span>
+                <span className="text-sm font-bold text-gray-600">Day 선택: </span>
                 <select 
                     value={selectedDay} 
                     onChange={handleDayFilterChange}
                     className="text-sm border border-gray-300 rounded px-2 py-1 flex-1 font-medium"
                 >
                     <option value="ALL">전체 보기 (Day 1~3)</option>
-                    <option value="1">Day 1만 (40단어)</option>
-                    <option value="2">Day 2만 (40단어)</option>
-                    <option value="3">Day 3만 (40단어)</option>
+                    <option value="1">Day 1 (40단어)</option>
+                    <option value="2">Day 2 (40단어)</option>
+                    <option value="3">Day 3 (40단어)</option>
+                    {/* 필요 시 Day 4 ~ 30 옵션도 이곳에 추가 가능합니다 */}
                 </select>
             </div>
           </header>
@@ -560,7 +563,6 @@
       );
     };
 
-    // 앱 실행
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>

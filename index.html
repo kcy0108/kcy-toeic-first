@@ -1693,19 +1693,19 @@
                 </div>
               </div>
 
-              <div className="flex gap-2">
-                {currentTab === 1 ? (
+              <div className="flex gap-2 items-center">
+                {currentTab === 1 && (
                   <button onClick={() => isPlayingAll ? stopPlaying() : setIsPlayingAll(true)} className={`px-6 py-3 rounded-lg font-bold text-white ${isPlayingAll ? 'bg-red-500' : 'bg-gray-800'}`}>
                     {isPlayingAll ? '듣기 중지' : '연속 듣기'}
                   </button>
-                ) : (
-                  isFlipped && (
-                    <>
-                      <button onClick={() => updateWordStatus(currentWord.id, 'X')} className="px-6 py-3 bg-red-100 text-red-700 rounded-lg font-bold">❌</button>
-                      <button onClick={() => updateWordStatus(currentWord.id, 'TRI')} className="px-6 py-3 bg-yellow-100 text-yellow-700 rounded-lg font-bold">🔺</button>
-                      <button onClick={() => updateWordStatus(currentWord.id, 'O')} className="px-6 py-3 bg-blue-100 text-blue-700 rounded-lg font-bold">⭕</button>
-                    </>
-                  )
+                )}
+
+                {isFlipped && (
+                  <div className="flex gap-2 animate-fade-in">
+                    <button onClick={() => updateWordStatus(currentWord.id, 'X')} className="px-5 py-3 bg-red-100 text-red-700 rounded-lg font-bold hover:bg-red-200 transition-colors">❌ 몰랐어요</button>
+                    <button onClick={() => updateWordStatus(currentWord.id, 'TRI')} className="px-5 py-3 bg-yellow-100 text-yellow-700 rounded-lg font-bold hover:bg-yellow-200 transition-colors">🔺 애매해요</button>
+                    <button onClick={() => updateWordStatus(currentWord.id, 'O')} className="px-5 py-3 bg-blue-100 text-blue-700 rounded-lg font-bold hover:bg-blue-200 transition-colors">⭕ 완벽해요</button>
+                  </div>
                 )}
               </div>
             </footer>

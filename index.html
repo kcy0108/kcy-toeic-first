@@ -1407,13 +1407,12 @@
 
       const handleDaySelect = (dayStr, targetTab = currentTab) => {
         stopPlaying();
-        
         const [start, end] = dayStr.split('-').map(Number);
         const baseList = allVocabData.filter(w => w.day >= start && w.day <= end);
-
+        
         if (baseList.length === 0) {
-            alert(`아직 Day ${dayStr} 단어 데이터가 코드에 추가되지 않았습니다!\n나중에 추가 후 다시 눌러주세요.`);
-            return;
+          alert(`Day ${dayStr} 단어가 없습니다.`);
+          return;
         }
 
         setSelectedDay(dayStr);
@@ -1422,8 +1421,15 @@
         setShowHint(false);
         setIsCompleted(false);
         clearCanvas();
-      };
 
+        // 4회독일 때는 X(틀린 단어)만 골라내기!
+        if (targetTab === 4) {
+          const reviewList = baseList.filter(w => wordStatuses[w.id] === 'X');
+          setLearningList(reviewList);
+        } else {
+          setLearningList(baseList);
+        }
+      };
       const handleTabChange = (tabNum) => {
         setCurrentTab(tabNum);
         if (selectedDay !== null) {
@@ -1511,16 +1517,16 @@
               <div className="text-sm font-semibold text-gray-500">전체 암기율 {progress}%</div>
             </header>
 
-            <div className="flex bg-white rounded-xl shadow-sm mb-6 p-2 w-full max-w-2xl mx-auto">
+            <div className="flex bg-white rounded-xl shadow-sm mb-6 p-2 w-full max-w-xl mx-auto border border-gray-100">
               {[1, 2, 3, 4].map(num => (
                 <button
                   key={num}
-                  onClick={() => setCurrentTab(num)}
-                  className={`flex-1 py-3 text-lg font-bold rounded-lg transition-colors ${
-                    currentTab === num ? 'bg-blue-100 text-blue-700' : 'text-gray-500'
+                  onClick={() => handleTabChange(num)}
+                  className={`flex-1 py-3 text-base font-bold rounded-lg transition-all ${
+                    currentTab === num ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'
                   }`}
                 >
-                  {num}회독
+                  {num === 4 ? '4회독 (오답)' : `${num}회독`}
                 </button>
               ))}
             </div>
